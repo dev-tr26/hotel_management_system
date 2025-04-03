@@ -12,6 +12,8 @@ class Booking(models.Model):
     class Meta:
         db_table = 'bookings'
 
+
+
 class Guest(models.Model):
     TITLE_CHOICES = (
         ('Mr', 'Mr'),

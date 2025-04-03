@@ -30,5 +30,6 @@ urlpatterns = [
     path('customers/', include('customers.urls')),
     path('orders/', include('orders.urls')),
     path('billings/', include('billings.urls')),
-    path('rooms/', include('rooms.urls')),    
+    path('rooms/', include('rooms.urls')),
+    path('authentication/', include('authentication.urls')),  # Include auth routes    
 ]

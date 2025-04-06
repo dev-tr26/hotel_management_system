@@ -1,0 +1,51 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}MySite{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'auth/style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+    <!-- HEADER / NAVBAR -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <a href="{% url 'customers:customer_home' %}">MySite</a>
+            </div>
+            <ul class="nav-links">
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'customers:customer_home' %}">Home</a></li>
+                    <li><a href="{% url 'customers:guest_logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'customers:guest_login' %}">Login</a></li>
+                    <li><a href="{% url 'customers:guest_register' %}">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        {% block content %}
+        <!-- Page specific content goes here -->
+        {% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2025 MySite. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

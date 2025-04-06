@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os 
+from dotenv import load_dotenv
 
+load_dotenv() 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,7 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-262rm7m$uxv_ded(d&bj)%#ne2b804xlg7dr-$g75kq_-2*0qf'
+# SECRET_KEY = 'django-insecure-262rm7m$uxv_ded(d&bj)%#ne2b804xlg7dr-$g75kq_-2*0qf'
+
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,10 +48,8 @@ INSTALLED_APPS = [
     'billings',
     'rooms',
     'employees',
-    'corsheaders',                # For CORS
-    'rest_framework',             # Django REST Framework
-    'rest_framework_simplejwt.token_blacklist',
-    'authentication',
+    'social_django',
+
 
 
 
@@ -62,7 +65,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -70,6 +73,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 
@@ -127,7 +131,7 @@ DATABASES = {
 
 # DATABASE_ROUTERS = ['hotel_management.db_router.ImageDBRouter']
 
-# AUTH_USER_MODEL = 'customers.Guest'
+AUTH_USER_MODEL = 'customers.CustomUser'
 
 
 
@@ -148,6 +152,22 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_OAUTH_CLIENT_ID')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_OAUTH_CLIENT_SECRET')
+
+LOGIN_URL = 'guest_login'
+LOGOUT_URL = 'guest_logout'
+LOGIN_REDIRECT_URL = 'guest_home'
+
+
 
 
 # Internationalization
@@ -178,9 +198,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# REST Framework settings
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-}

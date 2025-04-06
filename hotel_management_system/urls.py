@@ -31,5 +31,5 @@ urlpatterns = [
     path('orders/', include('orders.urls')),
     path('billings/', include('billings.urls')),
     path('rooms/', include('rooms.urls')),
-    path('authentication/', include('authentication.urls')),  # Include auth routes    
+    path('oauth/', include('social_django.urls', namespace='social')),
 ]
